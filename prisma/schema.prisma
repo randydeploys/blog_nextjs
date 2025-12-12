@@ -20,35 +20,41 @@ enum UserRole {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String   // Store hashed passwords
-  name      String?
-  role      UserRole @default(SUBSCRIBER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  posts     Post[]
-  comments  Comment[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String?
+  role          UserRole  @default(SUBSCRIBER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  posts         Post[]
+  comments      Comment[]
+  emailVerified Boolean   @default(false)
+  image         String?
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
 }
 
 model Post {
   id            Int       @id @default(autoincrement())
   title         String
   slug          String    @unique // For SEO-friendly URLs
-  description   String?   // Short description or excerpt
+  description   String? // Short description or excerpt
   content       String?
-  featuredImage String?   // URL to a featured image
+  featuredImage String? // URL to a featured image
   published     Boolean   @default(false)
   publishedAt   DateTime? // For scheduled posts
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  authorId      Int
-  author        User      @relation(fields: [authorId], references: [id])
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
 
-  categories    Category[]
-  tags          Tag[]
-  comments      Comment[]
+  categories Category[]
+  tags       Tag[]
+  comments   Comment[]
 }
 
 model Category {
@@ -75,13 +81,61 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
 
-  postId    Int
-  post      Post     @relation(fields: [postId], references: [id])
+  postId Int
+  post   Post @relation(fields: [postId], references: [id])
 
-  parentId  Int?
-  parent    Comment? @relation("ChildComments", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  children  Comment[] @relation("ChildComments")
+  parentId Int?
+  parent   Comment?  @relation("ChildComments", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children Comment[] @relation("ChildComments")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }

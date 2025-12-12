@@ -27,7 +27,7 @@ async function main() {
     data: {
       email: 'admin@example.com',
       name: 'Admin User',
-      password: 'password123', // In a real app, hash this!
+      password: 'password123',
       role: UserRole.ADMIN,
     },
   })
