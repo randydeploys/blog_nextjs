@@ -8,7 +8,7 @@ export default async function Posts() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center -mt-16 text-[#333333]">
+    <div>
       <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)]">
         Posts
       </h1>
