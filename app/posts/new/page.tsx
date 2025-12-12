@@ -13,6 +13,10 @@ export default function NewPost() {
     await prisma.post.create({
       data: {
         title,
+        slug: title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)+/g, ""),
         content,
         authorId: 1,
       },
@@ -34,6 +38,7 @@ export default function NewPost() {
             type="text"
             id="title"
             name="title"
+            required
             placeholder="Enter your post title"
             className="w-full px-4 py-2 border rounded-lg"
           />
@@ -45,6 +50,7 @@ export default function NewPost() {
           <textarea
             id="content"
             name="content"
+            required
             placeholder="Write your post content here..."
             rows={6}
             className="w-full px-4 py-2 border rounded-lg"
