@@ -10,6 +10,14 @@ export default function NewPost() {
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
 
+    // For now, we'll assign the post to the first user found.
+    // In a real app, you would get the authenticated user's ID.
+    const user = await prisma.user.findFirst();
+
+    if (!user) {
+      throw new Error("No user found. Please create a user first.");
+    }
+
     await prisma.post.create({
       data: {
         title,
@@ -18,7 +26,7 @@ export default function NewPost() {
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)+/g, ""),
         content,
-        authorId: 1,
+        authorId: user.id,
       },
     });
 
