@@ -7,6 +7,7 @@ export default function HomePage() {
     <div>
       <h1>Welcome to the Home Page!</h1>
       <p>This is a basic Next.js page component.</p>
+      <p>test push on vercel</p>
       <Link href="/">Retour à l'accueil</Link>
     </div>
   );
