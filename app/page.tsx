@@ -1,23 +1,25 @@
-
-"use client";
-import Image from "next/image";
 import Link from "next/link";
-import prisma from '@/lib/prisma'
-import { authClient } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
+import prisma from "@/lib/prisma";
+import { UserGreeting } from "@/components/user-greeting";
+import Blog from "@/components/blog";
 
-export default function Home() {
-    const auth = authClient.useSession();
-
+export default async function Home() {
+  const posts = await prisma.post.findMany({
+    include: {
+      author: true,
+    },
+  });
+  console.log(posts);
   return (
-     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center -mt-16">
-      <h1 className="text-4xl font-bold mb-8 font-[family-name:var(--font-geist-sans)] text-[#333333]">
+    <main className="container mx-auto px-4 py-8 ">
+      <h1 className="text-5xl font-extrabold mb-8 text-center tracking-tight text-gray-900 font-[family-name:var(--font-geist-sans)]">
         Superblog
       </h1>
- 
 
-      {/* say hello if auth */}
-      {auth?.data?.user && <p>Hello {auth.data.user.name} <Button className="ml-2 " onClick={() => authClient.signOut()}>Sign out</Button></p>}
-    </div>
+      <UserGreeting />
+
+      <Blog />
+
+    </main>
   );
 }

@@ -42,9 +42,7 @@ export function LoginForm({
           });
         },
         onSuccess: () => {
-          toast.success("Connexion réussie", {
-            description: "Redirection vers le dashboard...",
-          });
+          toast.success("Connexion réussie");
           router.push("/");
         },
       }

@@ -112,6 +112,20 @@ async function main() {
     },
   })
 
+  const post3 = await prisma.post.create({
+    data: {
+      title: 'My Evening Routine',
+      slug: 'my-evening-routine',
+      description: 'How I end my day for maximum relaxation.',
+      content: 'Unwinding is key. I start by reading a book, then I do some light stretching...',
+      published: true,
+      authorId: author.id,
+      categories: {
+        connect: [{ id: lifeCategory.id }],
+      },
+    },
+  })
+
   // Create Comments
   await prisma.comment.create({
     data: {
@@ -126,6 +140,23 @@ async function main() {
       content: 'I learned a lot, thanks.',
       postId: post1.id,
       authorId: admin.id,
+    },
+  })
+
+  // Create Post Ratings
+  await prisma.postRating.create({
+    data: {
+      value: 5,
+      postId: post1.id,
+      userId: admin.id,
+    },
+  })
+
+  await prisma.postRating.create({
+    data: {
+      value: 2,
+      postId: post2.id,
+      userId: admin.id,
     },
   })
 

@@ -31,6 +31,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -77,20 +78,10 @@ export function NavUser() {
           className="justify-between"
           onClick={() => router.push("/login")}
         >
-          <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarFallback className="rounded-lg">?</AvatarFallback>
-            </Avatar>
-            <div className="grid text-left text-sm leading-tight">
-              <span className="truncate font-medium">Invité</span>
-              <span className="text-muted-foreground truncate text-xs">
-                Vous n’êtes pas connecté
-              </span>
-            </div>
-          </div>
-          <span className="text-primary text-xs font-medium underline">
+         
+          <Button className="w-full">
             Se connecter
-          </span>
+          </Button>
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>
